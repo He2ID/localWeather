@@ -21,10 +21,12 @@
 	<div id="city-now">武汉</div>
 	<div id="data"></div>
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>	
+
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=2fc8190ce96492feaa869adce815ea8"></script>
 <script>
-	var testapi= "https://restapi.amap.com/v3/weather/weatherInfo?city=110101&key=82fc8190ce96492feaa869adce815ea8"
-	var testapif= "https://restapi.amap.com/v3/weather/weatherInfo?city=110101&extensions=all&key=82fc8190ce96492feaa869adce815ea8"
-	var api="https://restapi.amap.com/v3/weather/weatherInfo?";
+	var testapi= "http://restapi.amap.com/v3/weather/weatherInfo?city=110101&key=82fc8190ce96492feaa869adce815ea8"
+	var testapif= "http://restapi.amap.com/v3/weather/weatherInfo?city=110101&extensions=all&key=82fc8190ce96492feaa869adce815ea8"
+	var api="http://restapi.amap.com/v3/weather/weatherInfo?";
 	var key="82fc8190ce96492feaa869adce815ea8";
 	$.getJSON(testapi,function(data){
 		$('#weather-now').html(data.lives[0].weather);
@@ -49,7 +51,7 @@
 		}
 	})
 	//地址
-	var testapiLocation = "https://restapi.amap.com/v3/geocode/regeo?key=82fc8190ce96492feaa869adce815ea8&location=112.240,30.310&extensions=base&batch=false&roadlevel=0"
+	var testapiLocation = "http://restapi.amap.com/v3/geocode/regeo?key=82fc8190ce96492feaa869adce815ea8&location=112.240,30.310&extensions=base&batch=false&roadlevel=0"
 // http://restapi.amap.com/v3/geocode/regeo?
 // key=82fc8190ce96492feaa869adce815ea8
 // &location=112.240,30.310
