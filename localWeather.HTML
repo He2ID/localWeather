@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Local Weather</title>
+	<style>
+		#weather-now{
+			width: 50px;
+			height: 50px;
+			background:	#ADFF2F;
+		}
+		#city-now{
+			width: 50px;
+			height: 30px;
+			background:#40E0D0;
+		}
+	</style>
+</head>
+<body>
+	<div id="weather-now"></div>
+	<div id="city-now">武汉</div>
+	<div id="data"></div>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>	
+<script>
+	var testapi= "http://restapi.amap.com/v3/weather/weatherInfo?city=110101&key=82fc8190ce96492feaa869adce815ea8"
+	var testapif= "http://restapi.amap.com/v3/weather/weatherInfo?city=110101&extensions=all&key=82fc8190ce96492feaa869adce815ea8"
+	var api="http://restapi.amap.com/v3/weather/weatherInfo?";
+	var key="82fc8190ce96492feaa869adce815ea8";
+	$.getJSON(testapi,function(data){
+		$('#weather-now').html(data.lives[0].weather);
+	});
+	//当前天气
+	// $.ajax({
+	// 	url:testapi,
+	// 	datatype:JSON,
+	// 	success:function(data){
+	// 		console.log(data);
+	// 		$('#weather-now').html(data.lives[0].weather);
+	// 	}
+	// })
+	//预报
+	// $.ajax({
+	// 	url:testapif,
+	// 	datatype:JSON,
+	// 	success:function(data){
+	// 		console.log(data);
+	// 		var forcastArr = data.forecasts[0].casts;
+	// 		console.log(forcastArr);
+	// 	}
+	// })
+	//地址
+	var testapiLocation = "http://restapi.amap.com/v3/geocode/regeo?key=82fc8190ce96492feaa869adce815ea8&location=112.240,30.310&extensions=base&batch=false&roadlevel=0"
+// http://restapi.amap.com/v3/geocode/regeo?
+// key=82fc8190ce96492feaa869adce815ea8
+// &location=112.240,30.310
+// &extensions=base
+// &batch=false
+// &roadlevel=0
+	
+		$.ajax({
+		url:testapiLocation,
+		datatype:JSON,
+		success:function(data){
+			var locationArr = data["regeocode"]["addressComponent"];
+			console.log(locationArr['country']);
+			console.log(locationArr["city"]);
+		}
+	})
+	if (navigator.geolocation) {
+	  navigator.geolocation.getCurrentPosition(function(position)         { $("#data").html(
+	        "latitude: " + position.coords.latitude 
+	      + "<br>longitude: " + position.coords.longitude
+	     );
+	  });
+	}
+</script>
+</body>
+</html>
