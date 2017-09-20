@@ -2,83 +2,88 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
 	<title>Local Weather</title>
+	<link rel="stylesheet" href="font/iconfont.css">
 	<style>
 		#weather-now{
-			width: 50px;
-			height: 50px;
+			
 			background:	#ADFF2F;
+			text-align: center;
 		}
 		#city-now{
-			width: 50px;
 			height: 30px;
 			background:#40E0D0;
+			text-align: center;
+		}
+		.iconfont{
+			font-size: 20px;
 		}
 	</style>
-</head>
+	
+
 <body>
-	<div id="weather-now"></div>
-	<div id="city-now">武汉</div>
-	<div id="data"></div>
+	<div id="weather-now">
+		<i class="icon iconfont"></i>
+		<p></p>
+	</div>
+	           
+                	                
+	<div id="city-now"></div>
+	<div id="local-data"></div>
+	<div id="weather-forcast"></div>
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>	
 <script>
-	var AMapUIProtocol = 'https:'; 
-</script>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=2fc8190ce96492feaa869adce815ea8"></script>
-<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
-<script>
-	var testapi= "http://restapi.amap.com/v3/weather/weatherInfo?city=110101&key=82fc8190ce96492feaa869adce815ea8"
-	var testapif= "http://restapi.amap.com/v3/weather/weatherInfo?city=110101&extensions=all&key=82fc8190ce96492feaa869adce815ea8"
-	var api="http://restapi.amap.com/v3/weather/weatherInfo?";
-	var key="82fc8190ce96492feaa869adce815ea8";
-	$.getJSON(testapi,function(data){
-		$('#weather-now').html(data.lives[0].weather);
-	});
+	//地理信息
+	console.log(navigator.geolocation);
+	if (navigator.geolocation){
+		navigator.geolocation.getCurrentPosition(function(position){
+			console.log(position.coords.latitude);
+			console.log(position.coords.longitude);
+    		$("#local-data").html("latitude: " + position.coords.latitude + "<br>longitude: " + position.coords.longitude);
+  		});
+	}	
+	//地址
+	var testapiLocation = "http://restapi.amap.com/v3/geocode/regeo?key=82fc8190ce96492feaa869adce815ea8&location="
+							+ "112.240,30.310"
+							+"&extensions=base&batch=false&roadlevel=0";
+	//获取城市名称
+	$.ajax({
+		url:testapiLocation,
+		datatype:JSON,
+		success:function(data){
+			var locationArr = data["regeocode"]["addressComponent"];
+			$('#city-now').html( "<p>" + locationArr['country'] + "&emsp;" + locationArr['city']+"</p>" );
+		
+		}
+	})
+	var testapi= "http://restapi.amap.com/v3/weather/weatherInfo?city=" 
+				+ "110101"
+				+ "&key=82fc8190ce96492feaa869adce815ea8";
+	//var api="http://restapi.amap.com/v3/weather/weatherInfo?";
+	//var key="82fc8190ce96492feaa869adce815ea8";
+	// $.getJSON(testapi,function(data){
+	// 	$('#weather-now').html(data.lives[0].weather);
+	// });
 	//当前天气
 	$.ajax({
 		url:testapi,
 		datatype:JSON,
 		success:function(data){
 			console.log(data);
-			$('#weather-now').html(data.lives[0].weather);
+			$('#weather-now>p').html(data.lives[0].weather);
+			$('#weather-now>i').addClass("icon-qing");
 		}
 	})
 	//预报
-	$.ajax({
-		url:testapif,
-		datatype:JSON,
-		success:function(data){
-			console.log(data);
-			var forcastArr = data.forecasts[0].casts;
-			console.log(forcastArr);
-		}
-	})
-	//地址
-	var testapiLocation = "http://restapi.amap.com/v3/geocode/regeo?key=82fc8190ce96492feaa869adce815ea8&location=112.240,30.310&extensions=base&batch=false&roadlevel=0"
-// http://restapi.amap.com/v3/geocode/regeo?
-// key=82fc8190ce96492feaa869adce815ea8
-// &location=112.240,30.310
-// &extensions=base
-// &batch=false
-// &roadlevel=0
-	
-		$.ajax({
-		url:testapiLocation,
-		datatype:JSON,
-		success:function(data){
-			var locationArr = data["regeocode"]["addressComponent"];
-			console.log(locationArr['country']);
-			console.log(locationArr["city"]);
-		}
-	})
-	if (navigator.geolocation) {
-	  navigator.geolocation.getCurrentPosition(function(position)         { $("#data").html(
-	        "latitude: " + position.coords.latitude 
-	      + "<br>longitude: " + position.coords.longitude
-	     );
-	  });
-	}
+	// $.ajax({
+	// 	url:testapif,
+	// 	datatype:JSON,
+	// 	success:function(data){
+	// 		console.log(data);
+	// 		var forcastArr = data.forecasts[0].casts;
+	// 		console.log(forcastArr);
+	// 	}
+	// })
 </script>
 </body>
 </html>
